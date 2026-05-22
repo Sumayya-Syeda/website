@@ -1,4 +1,5 @@
 import type { Narrative } from './narrative';
+import { withBase } from '../lib/path';
 
 export type IconName =
   | 'rocket'
@@ -38,6 +39,12 @@ export interface RoadmapStop {
   pastel: string;
   pastelStrong: string;
   coords: { x: number; y: number };
+  /** Optional logo image — overrides the icon on the home-page marker and the detail-page header tile. */
+  logo?: string;
+  /** When true, the logo fills its tile edge-to-edge (used when the logo already has its own background). */
+  logoFill?: boolean;
+  /** Custom background color for the logo tile on the detail page (used when the logo is light-on-transparent). */
+  logoBg?: string;
   narrative?: Narrative;
   photos?: { src: string; alt: string; caption?: string }[];
   artifacts?: ExperienceArtifact[];
@@ -104,20 +111,17 @@ export const roadmap: RoadmapStop[] = [
     highlights: [
       'Capstone — EMG-controlled self-massage robot, integrating sensor and manipulator',
       'Researcher at the Human & Robot Partners Lab — wound-care manipulation; shadowed nurses for a month to ground the design',
-      "Avionics test team for MoonRanger, CMU's lunar micro-rover (SPI, HALCoGen)",
+      `TA across three CMU courses — Embedded Systems, Computer Systems, and Ethics in Computing (see <a href="${withBase('/experience#teaching')}" class="underline underline-offset-2 hover:text-accent transition-colors">Teaching Experience</a> for details)`,
     ],
     tags: ['ECE', 'Robotics', 'C/C++', 'FreeRTOS', 'Research', 'Teaching'],
     icon: 'scotty',
     pastel: '#e6dcf2',
     pastelStrong: '#9c83c8',
     coords: { x: 1015, y: 162 },
+    logo: '/experience/cmu/logo.png',
+    logoBg: '#9c83c8',
     narrative:
-      "[Placeholder] CMU was where I figured out what kind of engineer I wanted to be. The first two years were a deep dive into systems and embedded — building things from logic gates up. The last two years pulled in robotics, controls, and research. Teaching three classes along the way taught me as much as taking them did.",
-    artifacts: [
-      { label: 'Capstone repo', href: '#', kind: 'code' },
-      { label: 'MoonRanger team', href: '#', kind: 'link' },
-      { label: 'HRP Lab', href: '#', kind: 'link' },
-    ],
+      "CMU was where I figured out what kind of engineer I wanted to be. The first two years were a deep dive into systems and embedded — building things from logic gates up. The last two years pulled in robotics, controls, and research. Teaching three classes along the way taught me as much as taking them did.",
   },
   {
     slug: 'joby',

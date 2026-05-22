@@ -22,7 +22,9 @@ export interface Project {
   narrative?: Narrative;
   photos?: { src: string; alt: string; caption?: string; href?: string; widthPercent?: number }[];
   compactPhotos?: boolean;
-  video?: { src?: string; youtubeId?: string; caption?: string };
+  video?: { src?: string; youtubeId?: string; caption?: string; widthPercent?: number; poster?: string };
+  /** When true, the video renders as a cell inside the photos grid instead of as a separate section below. */
+  videoInline?: boolean;
   artifacts?: ProjectArtifact[];
 }
 
@@ -117,6 +119,7 @@ export const projects: Project[] = [
     ],
     video: {
       src: '/projects/emg-self-massage-robot/demo.mp4',
+      poster: '/projects/emg-self-massage-robot/demo-poster.jpg',
     },
     artifacts: [
       {
@@ -151,6 +154,7 @@ export const projects: Project[] = [
         src: '/projects/search-and-rescue-lab/robot.jpg',
         alt: 'The Lego search-and-rescue robot — Raspberry Pi, motors, claw-style pickup mechanism, and large terrain wheels, on the lab bench.',
         caption: 'The robot, with its claw-pickup design.',
+        widthPercent: 50,
       },
     ],
     narrative: [
@@ -181,15 +185,14 @@ export const projects: Project[] = [
         ],
       },
     ],
-    artifacts: [
-      {
-        label: 'Lab spec (CMU 16-311)',
-        href: 'https://www.cs.cmu.edu/~16311/current/labs/lab07/index.html',
-        kind: 'link',
-      },
-      { label: 'Code repo', href: '#', kind: 'code' },
-      { label: 'Demo video', href: '#', kind: 'video' },
-    ],
+    video: {
+      src: '/projects/search-and-rescue-lab/demo.mp4',
+      poster: '/projects/search-and-rescue-lab/demo-poster.jpg',
+      widthPercent: 50,
+      caption:
+        "A demo of the robot climbing stairs and traversing rough terrain to 'rescue' the Lego human.",
+    },
+    videoInline: true,
   },
   {
     slug: 'self-balancing-robot',
@@ -207,9 +210,6 @@ export const projects: Project[] = [
     category: 'Robotics',
     narrative:
       'The robot was a tall Lego structure mounted on two wheels, with a downward-facing light sensor at the front and another at the back. The difference between those two readings told us which way the structure was leaning: if the front read higher than the back by more than a small delta, the robot was tilting forward; if lower, backward. The control loop turned the wheels just enough to drive that difference back to zero — a calibration step at the start of each run, plus tuned PID gains, kept the robot upright.',
-    artifacts: [
-      { label: 'Code repo', href: '#', kind: 'code' },
-    ],
   },
   {
     slug: 'jenga-robot-arm',
@@ -225,11 +225,12 @@ export const projects: Project[] = [
     tags: ['MATLAB', 'Kinematics', 'Trajectory planning'],
     category: 'Robotics',
     narrative:
-      '[Placeholder] Detail the kinematics derivation, how spline interpolation kept end-effector motion smooth, and what failed first when stacking taller.',
-    artifacts: [
-      { label: 'MATLAB code', href: '#', kind: 'code' },
-      { label: 'Demo video', href: '#', kind: 'video' },
-    ],
+      "A 5-joint robot arm controlled in MATLAB. To pick up and stack Jenga blocks, I used forward and inverse kinematics to interpolate the positions the arm's end effector needed to reach, combined with spline trajectories so the arm moved smoothly between blocks instead of jerking. After enough back-and-forth picks and places, the arm built a six-layer Jenga tower.",
+    video: {
+      src: '/projects/jenga-robot-arm/demo.mp4',
+      poster: '/projects/jenga-robot-arm/demo-poster.jpg',
+      widthPercent: 25,
+    },
   },
 
   // ─── Systems ──────────────────────────────────────────
@@ -399,10 +400,22 @@ export const projects: Project[] = [
         ],
       },
     ],
-    artifacts: [
-      { label: 'Firmware repo', href: '#', kind: 'code' },
-      { label: 'PCB schematic (PDF)', href: '#', kind: 'pdf' },
+    photos: [
+      {
+        src: '/projects/motor-control-rtos/setup.jpg',
+        alt: 'Motor controller hardware setup — STM32 board on a custom PCB with keypad, LCD, and DC motor wired up on the bench.',
+        caption: 'The full setup: STM32 board on the custom PCB, with keypad, LCD, and DC motor.',
+        widthPercent: 50,
+      },
     ],
+    video: {
+      src: '/projects/motor-control-rtos/demo.mp4',
+      poster: '/projects/motor-control-rtos/demo-poster.jpg',
+      widthPercent: 50,
+      caption:
+        "A demo of me entering PID values for the motor and then setting the wheel's target position via buttons. The wheel smoothly rotates to that encoder position using the tuned PID gains — you can see how close it lands to the target on the graph displayed on my computer.",
+    },
+    videoInline: true,
   },
   {
     slug: 'software-security-exploits',

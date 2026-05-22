@@ -19,6 +19,9 @@ interface UnifiedItem {
   pastelStrong: string;
   isLatest: boolean;
   topLabel: string; // "Currently" or region name
+  logo?: string;
+  logoFill?: boolean;
+  logoBg?: string;
   narrative?: Narrative;
   photos?: { src: string; alt: string; caption?: string }[];
   artifacts?: { label: string; href: string; kind?: string }[];
@@ -42,6 +45,9 @@ export async function getStaticPaths() {
       pastelStrong: stop.pastelStrong,
       isLatest,
       topLabel: isLatest ? 'Currently' : stop.region,
+      logo: stop.logo,
+      logoFill: stop.logoFill,
+      logoBg: stop.logoBg,
       narrative: stop.narrative,
       photos: stop.photos,
       artifacts: stop.artifacts,
@@ -80,13 +86,34 @@ const photos = item.photos ?? [];
 
     <header class="mb-12">
       <div class="flex items-start gap-5 mb-5">
-        <div
-          class="shrink-0 w-14 h-14 rounded-xl flex items-center justify-center"
-          style={`background: ${item.pastel}; color: ${item.pastelStrong};`}
-          aria-hidden="true"
-        >
-          <Icon name={item.icon} size={28} />
-        </div>
+        {item.logo && item.logoFill ? (
+          <div class="shrink-0 w-14 h-14 rounded-xl overflow-hidden">
+            <img
+              src={withBase(item.logo)}
+              alt={`${item.title} logo`}
+              class="w-full h-full object-cover"
+            />
+          </div>
+        ) : item.logo ? (
+          <div
+            class="shrink-0 w-14 h-14 rounded-xl border flex items-center justify-center p-2"
+            style={`background: ${item.logoBg ?? '#ffffff'}; border-color: ${item.logoBg ?? '#e6e3da'};`}
+          >
+            <img
+              src={withBase(item.logo)}
+              alt={`${item.title} logo`}
+              class="max-w-full max-h-full object-contain"
+            />
+          </div>
+        ) : (
+          <div
+            class="shrink-0 w-14 h-14 rounded-xl flex items-center justify-center"
+            style={`background: ${item.pastel}; color: ${item.pastelStrong};`}
+            aria-hidden="true"
+          >
+            <Icon name={item.icon} size={28} />
+          </div>
+        )}
         <div class="flex-1 min-w-0">
           <div class="flex flex-wrap items-baseline gap-x-4 gap-y-1 mb-2">
             <span
@@ -120,7 +147,7 @@ const photos = item.photos ?? [];
                 style={`background: ${item.pastelStrong};`}
                 aria-hidden="true"
               ></span>
-              <span>{h}</span>
+              <span set:html={h}></span>
             </li>
           ))}
         </ul>
@@ -146,7 +173,7 @@ const photos = item.photos ?? [];
     <section class="mb-12">
       <p class="text-lg text-ink/90 leading-relaxed mb-8">{item.blurb}</p>
       {typeof item.narrative === 'string' && (
-        <p class="text-ink/85 leading-relaxed">{item.narrative}</p>
+        <p class="text-lg text-ink/90 leading-relaxed">{item.narrative}</p>
       )}
       {Array.isArray(item.narrative) && item.narrative.map((section) => (
         <div class="mb-8 last:mb-0">

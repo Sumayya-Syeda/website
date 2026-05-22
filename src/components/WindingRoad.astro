@@ -124,7 +124,7 @@ const roadPath = buildPath();
         >
           {isLatest && (
             <circle
-              r="30"
+              r="36"
               fill="none"
               stroke="var(--pastel-strong)"
               stroke-width="1.5"
@@ -133,23 +133,37 @@ const roadPath = buildPath();
             />
           )}
           <!-- Hit area -->
-          <circle r="42" fill="transparent" />
+          <circle r="46" fill="transparent" />
           <!-- Pin shadow -->
-          <ellipse cx="0" cy="26" rx="16" ry="3" fill="#1a1a1a" opacity="0.14" />
+          <ellipse cx="0" cy="30" rx="18" ry="3" fill="#1a1a1a" opacity="0.14" />
 
           <!-- Outer ring -->
           <circle
             class="marker-ring"
-            r="20"
+            r="26"
             fill="var(--pastel)"
             stroke="var(--pastel-strong)"
             stroke-width="2.5"
           />
 
-          <!-- Inner dot with company icon -->
-          <circle class="marker-dot" r="14" fill="var(--pastel-strong)" />
+          <!-- Inner dot with company logo or icon -->
+          {stop.logo ? (
+            <g>
+              <circle class="marker-dot" r="20" fill="var(--pastel-strong)" />
+              <image
+                href={withBase(stop.logo)}
+                x="-13"
+                y="-13"
+                width="26"
+                height="26"
+                preserveAspectRatio="xMidYMid meet"
+              />
+            </g>
+          ) : (
+          <g>
+          <circle class="marker-dot" r="20" fill="var(--pastel-strong)" />
           <g
-            transform="translate(-9 -9) scale(0.75)"
+            transform="translate(-12 -12) scale(1)"
             stroke="#fff"
             stroke-width="1.8"
             stroke-linecap="round"
@@ -184,6 +198,8 @@ const roadPath = buildPath();
               </g>
             )}
           </g>
+          </g>
+          )}
 
           {isLatest && (
             <text

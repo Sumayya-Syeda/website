@@ -52,7 +52,7 @@ const photos = project.photos ?? [];
     </header>
 
     <!-- Photos -->
-    {photos.length > 0 && (
+    {(photos.length > 0 || (project.videoInline && project.video)) && (
       <section class="mb-14" aria-label="Photos">
         <div class={project.compactPhotos
           ? 'grid grid-cols-1 sm:grid-cols-3 gap-4'
@@ -79,13 +79,34 @@ const photos = project.photos ?? [];
               )}
             </figure>
           ))}
+          {project.videoInline && project.video && project.video.src && (
+            <figure
+              style={project.video.widthPercent ? `max-width: ${project.video.widthPercent}%; margin-left: auto; margin-right: auto;` : ''}
+            >
+              <video
+                src={withBase(project.video.src)}
+                poster={project.video.poster ? withBase(project.video.poster) : undefined}
+                controls
+                preload="metadata"
+                class="rounded-lg w-full bg-paper-warm"
+              ></video>
+              {project.video.caption && (
+                <figcaption class="text-xs text-ink-muted mt-2">{project.video.caption}</figcaption>
+              )}
+            </figure>
+          )}
         </div>
       </section>
     )}
 
-    {project.video && (
+    {project.video && !project.videoInline && (
       <section class="mb-14" aria-label="Demo video">
-        <div class="max-w-2xl mx-auto rounded-lg overflow-hidden bg-paper-warm">
+        <div
+          class="mx-auto rounded-lg overflow-hidden bg-paper-warm"
+          style={project.video.widthPercent
+            ? `max-width: ${project.video.widthPercent}%;`
+            : 'max-width: 42rem;'}
+        >
           {project.video.youtubeId ? (
             <div class="aspect-video">
               <iframe
@@ -99,6 +120,7 @@ const photos = project.photos ?? [];
           ) : project.video.src ? (
             <video
               src={withBase(project.video.src)}
+              poster={project.video.poster ? withBase(project.video.poster) : undefined}
               controls
               preload="metadata"
               class="w-full h-auto block"
@@ -111,41 +133,12 @@ const photos = project.photos ?? [];
       </section>
     )}
 
-    <!-- Summary + Narrative -->
-    <section class="mb-12">
-      <p class="text-lg text-ink/90 leading-relaxed mb-8">{project.summary}</p>
-      {typeof project.narrative === 'string' && (
-        <p class="text-ink/85 leading-relaxed">{project.narrative}</p>
-      )}
-      {Array.isArray(project.narrative) && project.narrative.map((section) => (
-        <div class="mb-8 last:mb-0">
-          {section.heading && (
-            <h2 class="font-serif text-xl sm:text-2xl text-ink mb-3">{section.heading}</h2>
-          )}
-          {section.paragraphs?.map((p) => (
-            <p class="text-ink/85 leading-relaxed mb-3">{p}</p>
-          ))}
-          {section.bullets && (
-            <ul class="space-y-3 mt-4">
-              {section.bullets.map((b) => (
-                <li class="flex gap-3 text-ink/85 leading-relaxed">
-                  <span
-                    class="mt-2 shrink-0 w-1.5 h-1.5 rounded-full"
-                    style={`background: ${colors.strong};`}
-                    aria-hidden="true"
-                  ></span>
-                  <span>
-                    {b.name && <strong class="text-ink font-semibold">{b.name}</strong>}{b.name && ' — '}{b.text}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      ))}
+    <!-- Summary -->
+    <section class="mb-10">
+      <p class="text-lg text-ink/90 leading-relaxed">{project.summary}</p>
     </section>
 
-    <!-- Details list -->
+    <!-- What I did (now sits right after the summary so contribution reads first) -->
     <section
       class="mb-12 rounded-xl border-l-4 p-6 sm:p-8"
       style={`border-left-color: ${colors.strong}; background: ${colors.pastel}33;`}
@@ -178,6 +171,41 @@ const photos = project.photos ?? [];
         ))}
       </ul>
     </section>
+
+    <!-- Narrative (longer story) -->
+    {project.narrative && (
+      <section class="mb-12">
+        {typeof project.narrative === 'string' && (
+          <p class="text-ink/85 leading-relaxed">{project.narrative}</p>
+        )}
+        {Array.isArray(project.narrative) && project.narrative.map((section) => (
+          <div class="mb-8 last:mb-0">
+            {section.heading && (
+              <h2 class="font-serif text-xl sm:text-2xl text-ink mb-3">{section.heading}</h2>
+            )}
+            {section.paragraphs?.map((p) => (
+              <p class="text-ink/85 leading-relaxed mb-3">{p}</p>
+            ))}
+            {section.bullets && (
+              <ul class="space-y-3 mt-4">
+                {section.bullets.map((b) => (
+                  <li class="flex gap-3 text-ink/85 leading-relaxed">
+                    <span
+                      class="mt-2 shrink-0 w-1.5 h-1.5 rounded-full"
+                      style={`background: ${colors.strong};`}
+                      aria-hidden="true"
+                    ></span>
+                    <span>
+                      {b.name && <strong class="text-ink font-semibold">{b.name}</strong>}{b.name && ' — '}{b.text}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        ))}
+      </section>
+    )}
 
     <!-- Tech stack -->
     <section class="mb-12">

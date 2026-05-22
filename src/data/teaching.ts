@@ -14,6 +14,8 @@ export interface TeachingRole {
   icon: IconName;
   pastel: string;
   pastelStrong: string;
+  logo?: string;
+  logoBg?: string;
   blurb?: string;
   narrative?: Narrative;
   photos?: { src: string; alt: string; caption?: string }[];
@@ -38,6 +40,8 @@ export const teaching: TeachingRole[] = [
     icon: 'book',
     pastel: '#e6dcf2',
     pastelStrong: '#9c83c8',
+    logo: '/experience/cmu/logo.png',
+    logoBg: '#9c83c8',
   },
   {
     slug: 'ta-ethics-policy',
@@ -55,6 +59,8 @@ export const teaching: TeachingRole[] = [
     icon: 'book',
     pastel: '#e6dcf2',
     pastelStrong: '#9c83c8',
+    logo: '/experience/cmu/logo.png',
+    logoBg: '#9c83c8',
   },
   {
     slug: 'ta-computer-systems',
@@ -72,5 +78,7 @@ export const teaching: TeachingRole[] = [
     icon: 'book',
     pastel: '#e6dcf2',
     pastelStrong: '#9c83c8',
+    logo: '/experience/cmu/logo.png',
+    logoBg: '#9c83c8',
   },
 ];
